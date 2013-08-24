@@ -30,7 +30,7 @@ levels[0] = {
 	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
 	     {0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,0},
 	     {0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0},
-	     {0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0},
+	     {0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0},
 	     {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}}
 }
 
@@ -77,60 +77,62 @@ function terrain.draw()
 end
 
 function terrain.collide(player)
-	--[
+	collide = false
 	if terrain.isWall(math.floor(player.x),math.floor(player.y)) then -- en bas à gauche
-	print("cas1")
+		collide = true
+		--print("cas1")
 		dx = 1-math.mod(player.x,1)
 		dy = math.mod(player.y,1)
+		
 		print("dx"..dx)
 		print("dy"..dy)
 		if dy <= dx then
-			print("cas1a")
-			player.y = player.y - dy
-			player.jumping = true
-			collide = true
+			if (dy > 0.00001) then
+				--print("cas1a")
+				player.y = math.floor(player.y) - 0.00001
+			end
 		else
 			print("cas1b")
 			player.x = player.x + dx
-			player.jumping = true
-			collide = true
 		end
 	elseif terrain.isWall(math.floor(player.x+player.w),math.floor(player.y)) then -- en bas à droite
-	print("cas2")
+		collide = true
+		print("cas2")
 		dx = math.mod(player.x+player.w,1)
-		dy = 1-math.mod(player.y,1)
+		dy = math.mod(player.y,1)
 		if dy <= dx then
-			player.y = player.y - dy
-			player.jumping = true
-			collide = true
+			if (dy > 0.00001) then
+				player.y = math.floor(player.y)
+			end
 		else
-			player.x = player.x - dx
-			player.jumping = true
-			collide = true
+			player.x = player.x - dx - .000001
 		end
 	elseif terrain.isWall(math.floor(player.x),math.floor(player.y-player.h)) then -- en haut à gauche
-	print("cas3")
+		collide = true
+		print("cas3")
 		dx = 1-math.mod(player.x,1)
-		dy = math.mod(player.y+player.h,1)
+		dy = 1-math.mod(player.y+player.h,1)
 		if dy <= dx then
-			player.y = player.y + dy
-			player.jumping = true
+			player.y = player.y + dy + 0.00001
 		else
 			player.x = player.x + dx
-			player.jumping = true
 		end
 	elseif terrain.isWall(math.floor(player.x+player.w),math.floor(player.y-player.h)) then -- en haut à droite
-	print("cas4")
+		collide = true
+		print("cas4")
 		dx = math.mod(player.x+player.w,1)
-		dy = math.mod(player.y+player.h,1)
+		dy = 1-math.mod(player.y+player.h,1)
 		if dy <= dx then
 			player.y = player.y + dy
-			player.jumping = true
 		else
-			player.x = player.x - dx
-			player.jumping = true
+			player.x = player.x - dx -.000001
 		end
 	end
+	if collide then
+		print("collide")
+		player.vy = 0
+	end
+	
 end
 
 function terrain.val(x,y)
