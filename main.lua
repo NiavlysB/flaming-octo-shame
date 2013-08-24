@@ -15,6 +15,7 @@ function love.load()
 	anim = newAnimation(perso, 30, 40, 0.125, 0)
 	imgBg = love.graphics.newImage("img/bg.png")
 	imgTile = love.graphics.newImage("img/tile.png")
+	imgPerso = love.graphics.newImage("img/p1.png")
 
 	--loadLevel("level0")
 	renderLevel(0)
@@ -24,6 +25,7 @@ end
 function love.update(dt)
     --dt = math.min(dt, 1/10)
 	if state == "game" then
+		terrain.update(dt)
 		player.update(dt)
 	end
 end

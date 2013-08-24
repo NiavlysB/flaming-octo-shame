@@ -50,11 +50,12 @@ function terrain.collide()
 end
 
 function terrain.update(dt)
-
+	--if player.x > camX+(camW*.75) then
+	--	camX = player.x-(camW*.75) - (player.x-(camW*.75) % tile)
+	--end
 end
 
 function terrain.draw()
-	
 	j = 0
 	y = camY
 	while y <= camY+camH and y <= cur.h do
@@ -79,35 +80,60 @@ function terrain.draw()
 	end
 	love.graphics.setColor(255,255,255)
 	love.graphics.print("camX "..camX,0,0)
-	love.graphics.print("camY "..camY,0,20)
+	love.graphics.print("x "..player.x,0,20)
+	love.graphics.print("y "..player.y,0,40)
+	love.graphics.print("camW/2 "..camW/2,0,60)
+	
 	
 end
+
+if false then
+
+--[[function terrain.collide(player)
+	-- check des y
+	-- quatre points :
+	-- 		player.x, player.y
+	-- 		player.x+player.w, player.y
+	-- 		player.x, player.y-player.h
+	--		player.x+player.w, player.y-player.h
+	if terrain.isWall(math.floor(player.x), math.floor(player.y) then
+		if player.vy > 0 then -- vers le bas
+			player.y = player.y - math.floor(player.y)
+		else -- vers le haut (ou horiz)
+			player.y = player.y + 
+	terrain.isWall(math.floor(player.x+player.w), math.floor(player.y) or
+	terrain.isWall(math.floor(player.x), math.floor(player.y-player.h) or
+	terrain.isWall(math.floor(player.x+player.w), math.floor(player.y-player.h) then
+		-- collision
+		if 
+	
+end]]
+
+else
 
 function terrain.collide(player)
 	collide = false
 	if terrain.isWall(math.floor(player.x),math.floor(player.y)) then -- en bas à gauche
-		collide = true
 		--print("cas1")
 		dx = 1-math.mod(player.x,1)
 		dy = math.mod(player.y,1)
 		
-		print("dx"..dx)
-		print("dy"..dy)
+		--print("dx"..dx)
+		--print("dy"..dy)
 		if dy <= dx then
+		collide = true
 			if (dy > 0.00001) then
-				--print("cas1a")
-				player.y = math.floor(player.y) - 0.00001
+				player.y = math.floor(player.y) - 0.0001
 			end
 		else
-			print("cas1b")
 			player.x = player.x + dx
 		end
 	elseif terrain.isWall(math.floor(player.x+player.w),math.floor(player.y)) then -- en bas à droite
-		collide = true
-		print("cas2")
+		--print("cas2")
 		dx = math.mod(player.x+player.w,1)
 		dy = math.mod(player.y,1)
 		if dy <= dx then
+		collide = true
 			if (dy > 0.00001) then
 				player.y = math.floor(player.y)
 			end
@@ -115,31 +141,34 @@ function terrain.collide(player)
 			player.x = player.x - dx - .000001
 		end
 	elseif terrain.isWall(math.floor(player.x),math.floor(player.y-player.h)) then -- en haut à gauche
-		collide = true
-		print("cas3")
+		--print("cas3")
 		dx = 1-math.mod(player.x,1)
 		dy = 1-math.mod(player.y+player.h,1)
 		if dy <= dx then
+		collide = true
 			player.y = player.y + dy + 0.00001
 		else
 			player.x = player.x + dx
 		end
 	elseif terrain.isWall(math.floor(player.x+player.w),math.floor(player.y-player.h)) then -- en haut à droite
-		collide = true
-		print("cas4")
+		--print("cas4")
 		dx = math.mod(player.x+player.w,1)
 		dy = 1-math.mod(player.y+player.h,1)
 		if dy <= dx then
+		collide = true
 			player.y = player.y + dy
 		else
 			player.x = player.x - dx -.000001
 		end
 	end
 	if collide then
-		print("collide")
+		love.graphics.print("collide",0,60)
 		player.vy = 0
+	else
+		love.graphics.print("clear", 0, 60)
 	end
-	
+end
+
 end
 
 function terrain.val(x,y)
