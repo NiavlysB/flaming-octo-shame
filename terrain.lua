@@ -30,7 +30,7 @@ levels[0] = {
 	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
 	     {0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,0},
 	     {0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0},
+	     {0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0},
 	     {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}}
 }
 
@@ -77,17 +77,59 @@ function terrain.draw()
 end
 
 function terrain.collide(player)
-	if
-	terrain.isWall(math.floor(player.x),math.floor(player.y)) or
-	terrain.isWall(math.floor(player.x+player.w),math.floor(player.y)) or 
-	terrain.isWall(math.floor(player.x),math.floor(player.y-player.h)) or
-	terrain.isWall(math.floor(player.x+player.w),math.floor(player.y-player.h))
-	then
-		player.jumping = false -- TODO: seulement si touché le sol, pas un mur
-		 -- replacer au bon niveau
-		return true
-	else
-		return false
+	--[
+	if terrain.isWall(math.floor(player.x),math.floor(player.y)) then -- en bas à gauche
+	print("cas1")
+		dx = 1-math.mod(player.x,1)
+		dy = math.mod(player.y,1)
+		print("dx"..dx)
+		print("dy"..dy)
+		if dy <= dx then
+			print("cas1a")
+			player.y = player.y - dy
+			player.jumping = true
+			collide = true
+		else
+			print("cas1b")
+			player.x = player.x + dx
+			player.jumping = true
+			collide = true
+		end
+	elseif terrain.isWall(math.floor(player.x+player.w),math.floor(player.y)) then -- en bas à droite
+	print("cas2")
+		dx = math.mod(player.x+player.w,1)
+		dy = 1-math.mod(player.y,1)
+		if dy <= dx then
+			player.y = player.y - dy
+			player.jumping = true
+			collide = true
+		else
+			player.x = player.x - dx
+			player.jumping = true
+			collide = true
+		end
+	elseif terrain.isWall(math.floor(player.x),math.floor(player.y-player.h)) then -- en haut à gauche
+	print("cas3")
+		dx = 1-math.mod(player.x,1)
+		dy = math.mod(player.y+player.h,1)
+		if dy <= dx then
+			player.y = player.y + dy
+			player.jumping = true
+		else
+			player.x = player.x + dx
+			player.jumping = true
+		end
+	elseif terrain.isWall(math.floor(player.x+player.w),math.floor(player.y-player.h)) then -- en haut à droite
+	print("cas4")
+		dx = math.mod(player.x+player.w,1)
+		dy = math.mod(player.y+player.h,1)
+		if dy <= dx then
+			player.y = player.y + dy
+			player.jumping = true
+		else
+			player.x = player.x - dx
+			player.jumping = true
+		end
 	end
 end
 
