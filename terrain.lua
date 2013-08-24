@@ -4,7 +4,7 @@ numCurrentLevel = 0
 
 -- coordonnées écran par rapport au terrain
 camX = 1 -- TODO: devrait être en coordonnées pixels si on veut un truc continu (?)
-camY = 1
+camY = 6
 
 camH = 9 -- (coordonnées tiles)
 camW = 16
@@ -21,9 +21,14 @@ end
 
 levels[0] = {
 	w = 20,
-	h = 9,
+	h = 14,
 	s = {4,5},
 	d = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	     {0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
 	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
@@ -37,7 +42,7 @@ levels[0] = {
 function renderLevel(num)
 	numCurrentLevel = num
 	cur = levels[numCurrentLevel]
-	tile = window.h/levels[num].h
+	tile = 50 -- window.h/levels[num].h
 end
 
 function terrain.collide()
@@ -57,12 +62,14 @@ function terrain.draw()
 		i = 0
 		while x <= camX+camW and x <= cur.w do
 			if terrain.isEmpty(x,y) then
-				love.graphics.setColor(100,100,100)
-				love.graphics.rectangle("fill", i*tile, j*tile, tile, tile)
+				--love.graphics.setColor(240,240,240)
+				--love.graphics.rectangle("fill", i*tile, j*tile, tile, tile)
 			
 			elseif terrain.isWall(x,y) then
-				love.graphics.setColor(240,240,240)
-				love.graphics.rectangle("fill", i*tile, j*tile, tile, tile)
+				--love.graphics.setColor(100,100,100)
+				--love.graphics.rectangle("fill", i*tile, j*tile, tile, tile)
+				love.graphics.draw(imgTile, i*tile, j*tile)
+				
 			end
 			i = i+1
 			x = x+1

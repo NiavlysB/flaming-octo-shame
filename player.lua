@@ -3,8 +3,8 @@ const = 7 -- 350
 g = 9.81
 
 function player.init()
-	player.w = 0.5
-	player.h = 1.5
+	player.w = 0.6
+	player.h = 0.8
 	player.x = 3
 	player.y = 6
 	player.vx = 0
@@ -65,6 +65,8 @@ function player.update(dt)
 	else
 		timeJump = 0
 	end
+	
+	anim:update(dt)
 
 end
 
@@ -75,14 +77,15 @@ end
 
 function player.draw()
 	
-	love.graphics.print("x "..(player.x),0,40)
-	love.graphics.print("x "..(player.x),0,40)
-	love.graphics.print("FPS:".. love.timer.getFPS(),0,100)
+	--love.graphics.print("x "..(player.x),0,40)
+	--love.graphics.print("x "..(player.x),0,40)
+	--love.graphics.print("FPS:".. love.timer.getFPS(),0,100)
 	
 	love.graphics.setColor(180,255,180)
-	love.graphics.rectangle("fill", (player.x-camX)*tile, (player.y-camY-player.h)*tile, player.w*tile, player.h*tile)
-	love.graphics.setColor(255,0,0)
-	love.graphics.circle("fill", (player.x-camX)*tile, (player.y-camY)*tile, 10)
+	--love.graphics.rectangle("fill", (player.x-camX)*tile, (player.y-camY-player.h)*tile, player.w*tile, player.h*tile)
+	anim:draw( (player.x-camX)*tile, (player.y-camY-player.h)*tile )
+	--love.graphics.setColor(255,0,0)
+	--love.graphics.circle("fill", (player.x-camX)*tile, (player.y-camY)*tile, 10)
 	
 end
 
