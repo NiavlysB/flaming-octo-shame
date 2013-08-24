@@ -1,8 +1,36 @@
+require "player"
+require "bg"
+require "game"
+require "terrain"
 
-function love.draw()
-    love.graphics.print('Hello World!', 400, 300)
-end
+window = {}
+window.w = love.graphics.getWidth()
+window.h = love.graphics.getHeight()
 
 function love.load()
-	success = love.graphics.setMode(1600, 900, false)
+	state = "game"
+	player.init()
+end
+
+function love.update(dt)
+	if state == "game" then
+		player.update(dt)
+	end
+end
+
+function love.draw()
+	if state == "game" then
+		player.draw()
+	end
+end
+
+
+function love.keyreleased(key)
+	if key == "f" then
+		love.graphics.toggleFullscreen()
+	end
+end
+
+function love.keypressed(key)
+	player.keypressed(key)
 end
