@@ -25,6 +25,7 @@ end
 function love.draw()
 	if state == "game" then
 		player.draw()
+		terrain.draw()
 	end
 end
 

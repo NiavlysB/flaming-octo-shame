@@ -12,6 +12,14 @@ function player.init()
 end
 
 function player.update(dt)
+	
+	if love.keyboard.isDown("right","d") then
+		camX = camX + 1
+	elseif love.keyboard.isDown("left") then
+		camX = camX - 1
+	end
+
+	--[[
 	-- déplacement de base	
 	player.x = player.x + const * player.vx * dt
 	player.y = player.y + const * player.vy * dt
@@ -35,7 +43,7 @@ function player.update(dt)
 	elseif not player.jumping then
 		player.vy = 0
 	end
-	
+	]]--
 end
 
 function player.jump()
