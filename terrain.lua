@@ -28,14 +28,15 @@ levels[0] = {
 	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
 	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
 	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	     {0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,0},
+	     {0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0},
+	     {0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0},
 	     {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}}
 }
 
 function renderLevel(num)
 	numCurrentLevel = num
+	cur = levels[numCurrentLevel]
 	tile = window.h/levels[num].h
 end
 
@@ -48,7 +49,6 @@ function terrain.update(dt)
 end
 
 function terrain.draw()
-	cur = levels[numCurrentLevel]
 	
 	j = 0
 	y = camY
@@ -56,11 +56,11 @@ function terrain.draw()
 		x = camX
 		i = 0
 		while x <= camX+camW and x <= cur.w do
-			if cur.d[y][x] == 0 then
+			if terrain.isEmpty(x,y) then
 				love.graphics.setColor(100,100,100)
 				love.graphics.rectangle("fill", i*tile, j*tile, tile, tile)
 			
-			elseif cur.d[y][x] == 1 then
+			elseif terrain.isWall(x,y) then
 				love.graphics.setColor(240,240,240)
 				love.graphics.rectangle("fill", i*tile, j*tile, tile, tile)
 			end
@@ -75,3 +75,31 @@ function terrain.draw()
 	love.graphics.print("camY "..camY,0,20)
 	
 end
+
+function terrain.collide(player)
+	if
+	terrain.isWall(math.floor(player.x),math.floor(player.y)) or
+	terrain.isWall(math.floor(player.x+player.w),math.floor(player.y)) or 
+	terrain.isWall(math.floor(player.x),math.floor(player.y-player.h)) or
+	terrain.isWall(math.floor(player.x+player.w),math.floor(player.y-player.h))
+	then
+		player.jumping = false -- TODO: seulement si touché le sol, pas un mur
+		 -- replacer au bon niveau
+		return true
+	else
+		return false
+	end
+end
+
+function terrain.val(x,y)
+	return cur.d[y][x] or 0
+end
+
+function terrain.isWall(x,y)
+	return terrain.val(x,y) == 1
+end
+
+function terrain.isEmpty(x,y)
+	return terrain.val(x,y) == 0
+end
+
