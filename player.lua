@@ -43,6 +43,8 @@ function player.update(dt)
 	else player.vx = 0
 	end
 	
+	-- 	player.vx = player.vx + (1-player.vx) * 2
+	
 	--[[
 	if love.keyboard.isDown("down","d") then
 		player.vy = 1
@@ -75,7 +77,8 @@ function player.draw()
 	
 	love.graphics.print("x "..(player.x),0,40)
 	love.graphics.print("x "..(player.x),0,40)
-	love.graphics.print(timeJump,0,60)
+	love.graphics.print("FPS:".. love.timer.getFPS(),0,100)
+	
 	love.graphics.setColor(180,255,180)
 	love.graphics.rectangle("fill", (player.x-camX)*tile, (player.y-camY-player.h)*tile, player.w*tile, player.h*tile)
 	love.graphics.setColor(255,0,0)

@@ -17,6 +17,7 @@ function love.load()
 end
 
 function love.update(dt)
+    --dt = math.min(dt, 1/10)
 	if state == "game" then
 		player.update(dt)
 	end
