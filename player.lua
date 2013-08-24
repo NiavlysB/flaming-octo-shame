@@ -39,6 +39,7 @@ function player.update(dt)
 end
 
 function player.jump()
+	-- TODO: permettre des petits sauts (détecter la longueur de l'appui sur la touche)
 	if not player.jumping then
 		player.vy = -2
 		player.jumping = true

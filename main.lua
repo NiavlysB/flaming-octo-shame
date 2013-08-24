@@ -9,6 +9,10 @@ window.h = love.graphics.getHeight()
 
 function love.load()
 	state = "game"
+	
+	--loadLevel("level0")
+	renderLevel(0)
+	
 	player.init()
 end
 
