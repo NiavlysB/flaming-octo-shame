@@ -76,13 +76,6 @@ function player.jump()
 end
 
 function player.draw()
-	
-	--love.graphics.print("x "..(player.x),0,40)
-	--love.graphics.print("x "..(player.x),0,40)
-	--love.graphics.print("FPS:".. love.timer.getFPS(),0,100)
-	
-	--love.graphics.setColor(180,255,180)
-	--love.graphics.rectangle("fill", (player.x-camX)*tile, (player.y-camY-player.h)*tile, player.w*tile, player.h*tile)
 	--if math.abs(player.vx) < 0.001 then
 	--	love.graphics.draw(imgPerso, (player.x-camX)*tile, (player.y-camY-player.h)*tile )
 	--else
