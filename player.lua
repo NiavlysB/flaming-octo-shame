@@ -27,13 +27,12 @@ function player.update(dt)
 	terrain.collide(player)
 	terrain.collide(player)
 	
-		
 	if false then
 		-- Déplacement caméra
 		if love.keyboard.isDown("right","d") then
-			camX = camX + 1
+			camX = camX + .1
 		elseif love.keyboard.isDown("left") then
-			camX = camX - 1
+			camX = camX - .1
 		end
 	else
 		

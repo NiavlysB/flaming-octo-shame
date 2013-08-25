@@ -27,15 +27,15 @@ levels[0] = {
 	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,0},
-	     {0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0},
+	     {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	     {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	     {1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	     {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
+	     {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
+	     {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
+	     {1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,0},
+	     {1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0},
+	     {1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0},
 	     {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}}
 }
 
@@ -50,27 +50,30 @@ function terrain.collide()
 end
 
 function terrain.update(dt)
-	--if player.x > camX+(camW*.75) then
-	--	camX = player.x-(camW*.75) - (player.x-(camW*.75) % tile)
-	--end
-end
+--	if player.x > camX+(camW*.75) then
+--		camX = player.x-(camW*.75) - (player.x-(camW*.75) % tile)
+--	end
+		camX = camX + player.vx * const * dt
+	end
 
 function terrain.draw()
 	j = 0
-	y = camY
+	--print("camX "..camX.." offsetX "..math.mod(camX,1))
+	offsetY = math.mod(camY,1)
+	y = math.floor(camY)
 	while y <= camY+camH and y <= cur.h do
-		x = camX
+		offsetX = math.mod(camX,1)
+		x = math.floor(camX)
+		--[[love.graphics.print("offsetX "..offsetX,0,60)
+		love.graphics.print("offsetY "..offsetY,0,80)
+		love.graphics.print("camX "..camX,0,0)
+		love.graphics.print("camY "..camY,0,20)
+		love.graphics.print("X "..x,0,40)
+		love.graphics.print("Y "..y,40,40)]]
 		i = 0
 		while x <= camX+camW and x <= cur.w do
-			if terrain.isEmpty(x,y) then
-				--love.graphics.setColor(240,240,240)
-				--love.graphics.rectangle("fill", i*tile, j*tile, tile, tile)
-			
-			elseif terrain.isWall(x,y) then
-				--love.graphics.setColor(100,100,100)
-				--love.graphics.rectangle("fill", i*tile, j*tile, tile, tile)
-				love.graphics.draw(imgTile, i*tile, j*tile)
-				
+			if terrain.isWall(x,y) then
+				love.graphics.draw(imgTile, (i-offsetX)*tile, (j-offsetY)*tile)
 			end
 			i = i+1
 			x = x+1
@@ -80,9 +83,9 @@ function terrain.draw()
 	end
 	love.graphics.setColor(255,255,255)
 	love.graphics.print("camX "..camX,0,0)
-	love.graphics.print("x "..player.x,0,20)
-	love.graphics.print("y "..player.y,0,40)
-	love.graphics.print("camW/2 "..camW/2,0,60)
+	love.graphics.print("camY "..camY,0,20)
+	--love.graphics.print("x "..player.x,0,20)
+	--love.graphics.print("y "..player.y,0,40)
 	
 	
 end
