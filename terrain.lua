@@ -3,11 +3,13 @@ levels = {}
 numCurrentLevel = 0
 
 -- coordonnées écran par rapport au terrain
-camX = 1 -- TODO: devrait être en coordonnées pixels si on veut un truc continu (?)
-camY = 6
+camX = 1.5
+camY = 1.5
 
 camH = 9 -- (coordonnées tiles)
 camW = 16
+
+offset = 1.5
 
 -- taille d'une tile en pixels
 tile = 50 -- 50
@@ -20,23 +22,19 @@ function loadLevel(file)
 end
 
 levels[0] = {
-	w = 20,
-	h = 14,
-	s = {4,5},
-	d = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	     {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
-	     {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
-	     {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
-	     {1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,0},
-	     {1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0},
-	     {1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0},
-	     {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}}
+	w = 17,
+	h = 10,
+	s = {3,3},
+	d = {{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	     {1,0,0,0,0,0,0,0,0,0,0,0,1,9,0,0,1},
+	     {1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1},
+	     {1,1,1,1,0,1,0,0,0,0,0,0,1,0,0,0,1},
+	     {1,0,0,0,0,1,0,0,0,0,0,0,1,0,1,1,1},
+	     {1,0,1,1,1,1,0,0,0,0,0,0,1,0,0,0,1},
+	     {1,0,0,0,0,1,1,0,0,0,0,0,1,1,1,0,1},
+	     {1,1,1,1,0,1,1,1,0,0,0,0,1,0,0,0,1},
+	     {1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1},
+	     {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}}
 }
 
 function renderLevel(num)
@@ -45,45 +43,50 @@ function renderLevel(num)
 	tile = 50 -- window.h/levels[num].h
 end
 
-function terrain.collide()
-
-end
 
 function terrain.update(dt)
---	if player.x > camX+(camW*.75) then
---		camX = player.x-(camW*.75) - (player.x-(camW*.75) % tile)
---	end
-		camX = camX + player.vx * const * dt
+	--camX = player.x - camW/2
+	animSafe:update(dt)
+	if terrain.isSafe(math.floor(player.x), math.floor(player.y)) and player.vy == 0 and math.floor(player.x + player.w - 0.001) == math.floor(player.x) then
+		player.safe = true
+	else
+		player.safe = false
 	end
+	
+end
 
 function terrain.draw()
-	j = 0
-	--print("camX "..camX.." offsetX "..math.mod(camX,1))
-	offsetY = math.mod(camY,1)
-	y = math.floor(camY)
-	while y <= camY+camH and y <= cur.h do
-		offsetX = math.mod(camX,1)
-		x = math.floor(camX)
-		--[[love.graphics.print("offsetX "..offsetX,0,60)
-		love.graphics.print("offsetY "..offsetY,0,80)
-		love.graphics.print("camX "..camX,0,0)
-		love.graphics.print("camY "..camY,0,20)
-		love.graphics.print("X "..x,0,40)
-		love.graphics.print("Y "..y,40,40)]]
-		i = 0
-		while x <= camX+camW and x <= cur.w do
+	y = 1
+	while y <= cur.h do
+		x = 1
+		while x <= cur.w do
 			if terrain.isWall(x,y) then
-				love.graphics.draw(imgTile, (i-offsetX)*tile, (j-offsetY)*tile)
+				love.graphics.draw(imgTile, (x-offset)*tile, (y-offset)*tile)
+			elseif terrain.isSafe(x,y) then
+				--animSafe:draw((x-offsetX)*tile, (y-offset)*tile)
+				if player.safe then
+					love.graphics.draw(imgSafesafe, (x-offset)*tile, (y-offset)*tile)
+				else
+					love.graphics.draw(imgSafeunsafe, (x-offset)*tile, (y-offset)*tile)
+				end
 			end
-			i = i+1
 			x = x+1
 		end
-		j = j+1
 		y = y+1
 	end
-	love.graphics.setColor(255,255,255)
-	love.graphics.print("camX "..camX,0,0)
-	love.graphics.print("camY "..camY,0,20)
+	
+	--love.graphics.print("X "..player.x,0,0)
+	--love.graphics.print("w "..player.w,0,20)
+	--love.graphics.print(math.floor(player.x + player.w - 0.001),0,40)
+	--love.graphics.print(math.floor(player.x),0,60)
+	--love.graphics.print(tostring(terrain.isSafe(math.floor(player.x), math.floor(player.y))), 0,80)
+	--love.graphics.print(tostring(player.vy == 0), 0,100)
+	--love.graphics.print(tostring(math.floor(player.x + player.w - 0.001) == math.floor(player.x)), 0,120)
+	--[[if player.safe then
+		love.graphics.print("safe",0,40)
+	else
+		love.graphics.print("unsafe",0,40)
+	end]]
 	--love.graphics.print("x "..player.x,0,20)
 	--love.graphics.print("y "..player.y,0,40)
 	
@@ -116,6 +119,16 @@ else
 
 function terrain.collide(player)
 	collide = false
+	
+	-- Limites terrain (sera superflu si je résous les collisions contre un mur)
+	if player.x > 16.4 then
+		player.x = 16.4
+		--player.vx = -player.vx
+	elseif player.x <= 2 then
+		player.x = 2.000001
+		--player.vx = -player.vx
+	end
+	
 	if terrain.isWall(math.floor(player.x),math.floor(player.y)) then -- en bas à gauche
 		--print("cas1")
 		dx = 1-math.mod(player.x,1)
@@ -143,20 +156,22 @@ function terrain.collide(player)
 		else
 			player.x = player.x - dx - .000001
 		end
-	elseif terrain.isWall(math.floor(player.x),math.floor(player.y-player.h)) then -- en haut à gauche
+	elseif terrain.isWall(math.floor(player.x),math.floor(player.y-player.h+0.2)) then -- en haut à gauche
 		--print("cas3")
 		dx = 1-math.mod(player.x,1)
-		dy = 1-math.mod(player.y+player.h,1)
+		--dy = math.mod(player.y-player.h,1)
+		dy = 1-math.mod(player.y-player.h,1)
 		if dy <= dx then
 		collide = true
 			player.y = player.y + dy + 0.00001
 		else
 			player.x = player.x + dx
 		end
-	elseif terrain.isWall(math.floor(player.x+player.w),math.floor(player.y-player.h)) then -- en haut à droite
+	elseif terrain.isWall(math.floor(player.x+player.w),math.floor(player.y-player.h+0.2)) then -- en haut à droite
 		--print("cas4")
 		dx = math.mod(player.x+player.w,1)
-		dy = 1-math.mod(player.y+player.h,1)
+		--dy = math.mod(player.y-player.h,1)
+		dy = 1-math.mod(player.y-player.h,1)
 		if dy <= dx then
 		collide = true
 			player.y = player.y + dy
@@ -180,6 +195,10 @@ end
 
 function terrain.isWall(x,y)
 	return terrain.val(x,y) == 1
+end
+
+function terrain.isSafe(x,y)
+	return terrain.val(x,y) == 9
 end
 
 function terrain.isEmpty(x,y)
