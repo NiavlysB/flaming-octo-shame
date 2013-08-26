@@ -27,6 +27,15 @@ function love.load()
 	imgVictory = love.graphics.newImage("img/victory.png")
 	imgFailure = love.graphics.newImage("img/failure.png")
 	
+	sonMort = love.audio.newSource("sounds/mort.ogg", "static")
+	sonRepos = love.audio.newSource("sounds/repos.ogg", "static")
+	sonRepos:setLooping(true)
+	--sonMarche = love.audio.newSource("sounds/marche.ogg", "static")
+	--sonMarche:setLooping(true)
+	sonVic = love.audio.newSource("sounds/vic.ogg", "static")
+	sonSaut = love.audio.newSource("sounds/saut.ogg", "static")
+--	sonThunder = love.audio.newSource("sounds/thunder.ogg", "static")
+	
 	defaultfont = love.graphics.newFont(15)
 	font = love.graphics.newFont("LCD_Solid.ttf",400)
 	
@@ -44,7 +53,6 @@ function love.update(dt)
 	 	player.update(dt)
 		terrain.update(dt)
 	elseif state == "end" then
-	print("end?")
 		if love.keyboard.isDown(" ") then
 		print("re")
 		-- <UGLY>

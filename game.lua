@@ -2,9 +2,11 @@ game = {}
 
 
 function game.init()
+	played = false
 	state = "game"
 	game.doingflash = false
 	game.countdown = 10
+	love.audio.play(sonRepos)
 end
 
 function game.update(dt)
@@ -16,8 +18,16 @@ function game.drawHUD()
 		love.graphics.draw(screenshot)
 		if victory then
 			love.graphics.draw(imgVictory,0,0)
+			if not played then
+				love.audio.play(sonVic)
+				played = not played
+			end
 		else
 			love.graphics.draw(imgFailure,0,0)
+			if not played then
+				love.audio.play(sonMort)
+				played = not played
+			end
 		end
 	elseif game.doingflash then
 		love.graphics.rectangle("fill",0,0,800,450)

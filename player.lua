@@ -36,6 +36,7 @@ function player.update(dt)
 		--player.vx = player.vx + (-1-player.vx) * 0.25
 		player.vx = -1
 	else -- pas de touche de mouvement, mais peut-être saut en cours
+	
 		--if player.vy ~= 0 and player.vx ~= 0 then -- saut en cours
 		if math.abs(player.vx) > 0 then
 			player.vx = player.vx - (player.vx/math.abs(player.vx)) * (math.abs(player.vx)) * 0.25
@@ -44,19 +45,10 @@ function player.update(dt)
 		end
 	end
 	
-	if false then
-		if love.keyboard.isDown("down","d") then
-			player.vy = 1
-		elseif love.keyboard.isDown("up") then
-			player.vy = -1
-		else player.vy = 0
-		end
-	else
-		-- saut
-		if love.keyboard.isDown("up") then
-			if timeJump == 0 and player.vy == 0 then
-				player.jump()
-			end
+	-- saut
+	if love.keyboard.isDown("up") then
+	if timeJump == 0 and player.vy == 0 then
+			player.jump()
 		end
 	end
 	
@@ -71,12 +63,16 @@ function player.update(dt)
 end
 
 function player.jump()
+	love.audio.play(sonSaut)
 	timeJump = .4
 	player.vy = -2.5
 end
 
 function player.draw()
-	--if math.abs(player.vx) < 0.001 then
+	--if math.abs(player.vx) < 0.01 then
+	--	love.audio.stop(sonRepos)
+	--	love.audio.play(sonMarche)
+	--end
 	--	love.graphics.draw(imgPerso, (player.x-camX)*tile, (player.y-camY-player.h)*tile )
 	--else
 	if player.safe then
